@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Chatbot</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Hotel Assistant</h1>
+    <textarea id="question" placeholder="Ask your question here..."></textarea>
+    <button onclick="askQuestion()">Send</button>
+    <div id="response"></div>
+  </div>
+
+  <script>
+    async function askQuestion() {
+      const question = document.getElementById("question").value;
+      const responseDiv = document.getElementById("response");
+
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'your-api-key-here'  // Replace this with your actual key
+        },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await res.json();
+      if (data.answer) {
+        responseDiv.innerHTML = `<p><strong>Answer:</strong> ${data.answer}</p>`;
+      } else {
+        responseDiv.innerHTML = `<p style="color:red;"><strong>Error:</strong> ${data.error}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
